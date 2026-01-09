@@ -9,19 +9,27 @@ import animationData from '../public/homepageanimation.json';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(() => {
-    // Initialize from localStorage if available
+    // Initialize from localStorage on client-side only
     if (typeof window !== 'undefined') {
       return localStorage.getItem('darkMode') === 'true';
     }
     return false;
   });
+  const mountedRef = useRef(false);
 
   useEffect(() => {
-    // Apply the dark class to document element based on initial state
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    // Mark as mounted
+    mountedRef.current = true;
+  }, []);
+
+  useEffect(() => {
+    // Apply the dark class to document element when darkMode changes
+    if (mountedRef.current) {
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     }
   }, [darkMode]);
 
@@ -140,6 +148,23 @@ export default function Home() {
                 </div>
               </Link>
 
+              {/* Charity Donation Tracker Project */}
+              <Link href="/CharityDonation" className="group">
+                <div className="bg-white dark:bg-gray-900 p-8 rounded-xl border border-gray-200 dark:border-gray-800 hover:border-blue-500 dark:hover:border-green-500 hover:shadow-lg dark:hover:shadow-green-500/20 transition-all h-full">
+                  <div className="w-14 h-14 rounded-lg bg-purple-600 dark:bg-purple-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <span className="text-2xl">💝</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">Charity Donation Tracker</h3>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">Donate ETH to verified charities with full transparency and secure fund management.</p>
+                  <div className="flex items-center text-blue-600 dark:text-green-500 font-semibold group-hover:gap-2 transition-all">
+                    Launch App
+                    <svg className="w-5 h-5 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+
               {/* Placeholder Cards */}
               <div className="bg-white dark:bg-gray-900 p-8 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-800 h-full flex flex-col items-center justify-center text-center opacity-60">
                 <div className="w-14 h-14 rounded-lg bg-gray-200 dark:bg-gray-800 flex items-center justify-center mb-4">
@@ -149,16 +174,6 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-2">More Projects</h3>
                 <p className="text-sm text-gray-400 dark:text-gray-500">Coming Soon</p>
-              </div>
-
-              <div className="bg-white dark:bg-gray-800 p-8 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 h-full flex flex-col items-center justify-center text-center opacity-60">
-                <div className="w-14 h-14 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-2">Your Project</h3>
-                <p className="text-sm text-gray-400 dark:text-gray-500">Add New Project</p>
               </div>
             </div>
           </div>
