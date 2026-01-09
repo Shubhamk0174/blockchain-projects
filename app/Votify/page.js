@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import Link from 'next/link';
 
@@ -30,12 +30,9 @@ export default function Votify() {
   const [votingOpen, setVotingOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
+    // Initialize from localStorage if available
     if (typeof window !== 'undefined') {
-      const isDark = localStorage.getItem('darkMode') === 'true';
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      }
-      return isDark;
+      return localStorage.getItem('darkMode') === 'true';
     }
     return false;
   });
@@ -46,18 +43,18 @@ export default function Votify() {
   const [showAddForm, setShowAddForm] = useState(false);
 
   useEffect(() => {
-    // This effect is now only for cleanup if needed
-  }, []);
+    // Apply the dark class to document element based on initial state
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem('darkMode', newMode.toString());
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   // Connect wallet
@@ -295,7 +292,7 @@ export default function Votify() {
                 </button>
                 <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-700 dark:text-gray-300 flex items-start gap-2">
-                    <svg className="w-5 h-5 text-blue-600 dark:text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 text-blue-600 dark:text-green-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                     <span>Make sure MetaMask is installed and connected to Sepolia testnet</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import dynamic from 'next/dynamic';
 
@@ -9,29 +9,26 @@ import animationData from '../public/homepageanimation.json';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(() => {
+    // Initialize from localStorage if available
     if (typeof window !== 'undefined') {
-      const isDark = localStorage.getItem('darkMode') === 'true';
-      if (isDark) {
-        document.documentElement.classList.add('dark');
-      }
-      return isDark;
+      return localStorage.getItem('darkMode') === 'true';
     }
     return false;
   });
 
   useEffect(() => {
-    // This effect is now only for cleanup if needed
-  }, []);
+    // Apply the dark class to document element based on initial state
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const toggleDarkMode = () => {
     const newMode = !darkMode;
     setDarkMode(newMode);
     localStorage.setItem('darkMode', newMode.toString());
-    if (newMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
   };
 
   return (
